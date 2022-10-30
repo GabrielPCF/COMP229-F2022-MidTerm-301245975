@@ -39,16 +39,23 @@ router.post('/add', (req, res, next) => {
     /*****************
      * ADD CODE HERE *
      *****************/
+    var newBook;
     
-    
+    newBook = new book({
+      Title: req.body.title,
+      Description: "",
+      Price: req.body.price,
+      Author: req.body.author,
+      Genre: req.body.genre
+    });
+    book.create(newBook);
+    res.redirect('/books');
 });
 
 // GET the Book Details page in order to edit an existing Book
 router.get('/:id', (req, res, next) => {
 
-    /*****************
-     * ADD CODE HERE *
-     *****************/
+
     var id = req.params['id'];
     book.findById(id, (err, books) => {
       if (err) {
@@ -69,15 +76,27 @@ router.post('/:id', (req, res, next) => {
     /*****************
      * ADD CODE HERE *
      *****************/
-
+    var id = req.params['id'];
+    var newBook;
+    
+    newBook = new book({
+      _id: id,
+      Title: req.body.title,
+      Description: "",
+      Price: req.body.price,
+      Author: req.body.author,
+      Genre: req.body.genre
+    });
+    book.update({_id: id}, newBook, (err)=>{
+      if(err){
+        return console.error(err);
+      }
+    });
+    res.redirect('/books');
 });
 
 // GET - process the delete by user id
 router.get('/delete/:id', (req, res, next) => {
-
-    /*****************
-     * ADD CODE HERE *
-     *****************/
     var id = req.params['id'];
     book.findByIdAndRemove(id, (err, books) => {
       if (err) {
